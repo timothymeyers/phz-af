@@ -26,6 +26,14 @@ jobs:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v2
+
+    - run: |
+        cat > terraform.tfvars << EOF
+        appId    = "${{ secrets.AZURE_AD_CLIENT_ID }}"
+        password = "${{ secrets.AZURE_AD_CLIENT_SECRET }}"
+        EOF
+        mv terraform.tfvars terraform/terraform.tfvars
+        echo "hi!""
  
     - name: 'Terraform Format'
       uses: hashicorp/terraform-github-actions@master
