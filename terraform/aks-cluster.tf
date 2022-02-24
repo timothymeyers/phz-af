@@ -1,12 +1,12 @@
 resource "random_pet" "prefix" {}
 
 terraform {
-    backend "azurerm" {
-        resource_group_name     = "phopstfstates"
-        storage_account_name    = "phopstf"
-        container_name          = "tfstatedevops"
-        key                     = "tfstatedevops.tfstate"
-    }
+  backend "azurerm" {
+    resource_group_name  = "phopstfstates"
+    storage_account_name = "phopstf"
+    container_name       = "tfstatedevops"
+    key                  = "tfstatedevops.tfstate"
+  }
 }
 
 provider "azurerm" {
