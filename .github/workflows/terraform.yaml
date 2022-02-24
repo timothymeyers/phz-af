@@ -32,9 +32,9 @@ jobs:
         appId    = \"${{ secrets.AZURE_AD_CLIENT_ID }}\"
         password = \"${{ secrets.AZURE_AD_CLIENT_SECRET }}\"
         EOF
-        
+
         mv terraform.tfvars terraform/terraform.tfvars
-        echo "hi!""
+        echo "hi!"
  
     - name: 'Terraform Format'
       uses: hashicorp/terraform-github-actions@master
