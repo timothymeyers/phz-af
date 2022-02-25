@@ -3,7 +3,9 @@ name: 'Terraform'
 on:
   push:
     branches:
-    - main/terraform
+      - main
+    paths:
+      - 'terraform/**'
   pull_request:
   workflow_dispatch:
  
