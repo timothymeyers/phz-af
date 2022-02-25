@@ -1,4 +1,4 @@
-name: 'Terraform'
+name: 'tf-aks-deploy'
  
 on:
   push:
@@ -31,7 +31,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - run: |
+    - name: 'Setup tfvars'
+      run: |
         rm -f terraform.tfvars
         cat > terraform.tfvars << EOF
         appId    = "${{ env.ARM_CLIENT_ID }}"
@@ -40,26 +41,21 @@ jobs:
 
     - uses: hashicorp/setup-terraform@v1
 
-    - name: 'Terraform Format'
-      id: fmt
+    - id: fmt
       run: terraform fmt -check
       continue-on-error: true
          
-    - name: 'Terraform Init'
-      id: init
+    - id: init
       run: terraform init
  
-    - name: 'Terraform Validate'
-      id: validate
+    - id: validate
       run: terraform validate -no-color
 
-    - name: 'Terraform Plan'
-      id: plan
+    - id: plan
       run: terraform plan -no-color
       # continue-on-error: true
  
-    - name: Terraform Apply
-      if: github.ref == 'refs/heads/main'
+    - if: github.ref == 'refs/heads/main'
       id: apply
       run: terraform apply -auto-approve
 

@@ -1,4 +1,4 @@
-name: 'Destroy'
+name: 'tf-aks-destroy'
  
 on:
   workflow_dispatch:
@@ -25,7 +25,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - run: |
+    - name: 'Setup tfvars'
+      run: |
         rm -f terraform.tfvars
         cat > terraform.tfvars << EOF
         appId    = "${{ env.ARM_CLIENT_ID }}"
@@ -34,20 +35,16 @@ jobs:
 
     - uses: hashicorp/setup-terraform@v1
 
-    - name: 'Terraform Format'
-      id: fmt
+    - id: fmt
       run: terraform fmt -check
       continue-on-error: true
          
-    - name: 'Terraform Init'
-      id: init
+    - id: init
       run: terraform init
  
-    - name: 'Terraform Validate'
-      id: validate
+    - id: validate
       run: terraform validate -no-color
  
-    - name: Terraform Destroy
-      id: destroy
+    - id: destroy
       run: terraform destroy -auto-approve -lock=false
 
