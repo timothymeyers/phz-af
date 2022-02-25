@@ -45,6 +45,10 @@ jobs:
     - id: validate
       run: terraform validate -no-color
  
+    - id: plan
+      run: terraform plan -destroy -no-color
+      # continue-on-error: true
+
     - id: destroy
       run: terraform destroy -auto-approve -lock=false
 
