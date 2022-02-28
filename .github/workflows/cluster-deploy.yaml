@@ -2,8 +2,6 @@ name: 'tf-aks-deploy'
  
 on:
   push:
-    branches:
-      - main
     paths:
       - 'terraform/**'
   pull_request:
