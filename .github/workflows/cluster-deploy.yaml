@@ -1,0 +1,61 @@
+name: 'tf-aks-deploy'
+ 
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'terraform/**'
+  pull_request:
+  workflow_dispatch:
+ 
+jobs:
+  terraform:
+    name: 'tf-aks-deploy'
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
+    runs-on: ubuntu-latest
+    environment: production
+ 
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: "./terraform"
+ 
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: 'Setup tfvars'
+      run: |
+        rm -f terraform.tfvars
+        cat > terraform.tfvars << EOF
+        appId    = "${{ env.ARM_CLIENT_ID }}"
+        password = "${{ env.ARM_CLIENT_SECRET }}"
+        EOF
+
+    - uses: hashicorp/setup-terraform@v1
+
+    - id: fmt
+      run: terraform fmt -check
+      continue-on-error: true
+         
+    - id: init
+      run: terraform init
+ 
+    - id: validate
+      run: terraform validate -no-color
+
+    - id: plan
+      run: terraform plan -no-color
+      # continue-on-error: true
+ 
+    - if: github.ref == 'refs/heads/main'
+      id: apply
+      run: terraform apply -auto-approve
+
