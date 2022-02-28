@@ -13,9 +13,8 @@ provider "azurerm" {
   features {}
 }
 
-provider "azuread" {
-  features {}
-}
+provider "azuread" {}
+
 
 ### Resource Group
 
