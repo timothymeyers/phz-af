@@ -69,7 +69,7 @@ resource "azurerm_kubernetes_cluster" "default" {
 
   default_node_pool {
     name            = "default"
-    node_count      = 2
+    node_count      = 3
     vm_size         = "Standard_D2_v2"
     os_disk_size_gb = 30
   }
@@ -101,7 +101,14 @@ resource "azurerm_kubernetes_cluster" "default" {
 
 }
 
+resource "azurerm_kubernetes_cluster_node_pool" "horizon" {
+  name                  = "horizon"
+  kubernetes_cluster_id = azurerm_kubernetes_cluster.default.id
+  vm_size               = "Standard_DS2_v2"
+  node_count            = 8
+}
 
+### Assign AcrPull to AKS for the ACR we created
 
 # data "azuread_service_principal" "aks_principal" {
 #   application_id = var.appId
