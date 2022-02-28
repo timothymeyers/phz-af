@@ -13,6 +13,10 @@ provider "azurerm" {
   features {}
 }
 
+provider "azuread" {
+  version = "~>0.7"
+}
+
 resource "azurerm_resource_group" "default" {
   name     = "${random_pet.prefix.id}-rg"
   location = "East US"
@@ -29,7 +33,6 @@ resource "azurerm_container_registry" "default" {
   sku                      = "Basic"
   admin_enabled            = false
 }
-
 
 resource "azurerm_kubernetes_cluster" "default" {
   name                = "${random_pet.prefix.id}-aks"
@@ -56,4 +59,17 @@ resource "azurerm_kubernetes_cluster" "default" {
   tags = {
     environment = "Demo"
   }
+}
+
+
+
+data "azuread_service_principal" "aks_principal" {
+  application_id = var.appId
+}
+
+resource "azurerm_role_assignment" "acrpull_role" {
+  scope                            = azurerm_container_registry.default.id
+  role_definition_name             = "AcrPull"
+  principal_id                     = data.azuread_service_principal.aks_principal.id
+  skip_service_principal_aad_check = true
 }
