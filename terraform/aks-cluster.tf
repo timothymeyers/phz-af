@@ -17,6 +17,8 @@ provider "azuread" {
   version = "~>0.7"
 }
 
+### Resource Group
+
 resource "azurerm_resource_group" "default" {
   name     = "${random_pet.prefix.id}-rg"
   location = "East US"
@@ -26,6 +28,30 @@ resource "azurerm_resource_group" "default" {
   }
 }
 
+### Azure Log Analytics Workspace
+
+resource "azurerm_log_analytics_workspace" "default" {
+  name                = "${random_pet.prefix.id}-law"
+  resource_group_name = azurerm_resource_group.default.name
+  location            = azurerm_resource_group.default.location
+  sku                 = "PerGB2018"
+}
+
+resource "azurerm_log_analytics_solution" "default" {
+  solution_name         = "Containers"
+  workspace_resource_id = azurerm_log_analytics_workspace.default.id
+  workspace_name        = azurerm_log_analytics_workspace.default.name
+  location              = azurerm_resource_group.default.location
+  resource_group_name   = azurerm_resource_group.default.name
+
+  plan {
+    publisher = "Microsoft"
+    product   = "OMSGallery/Containers"
+  }
+}
+
+### Azure Container Registry
+
 resource "azurerm_container_registry" "default" {
   name                     = replace("${random_pet.prefix.id}-acr","-","")
   location                 = azurerm_resource_group.default.location
@@ -33,6 +59,8 @@ resource "azurerm_container_registry" "default" {
   sku                      = "Basic"
   admin_enabled            = false
 }
+
+### Azure Kubernetes Service
 
 resource "azurerm_kubernetes_cluster" "default" {
   name                = "${random_pet.prefix.id}-aks"
@@ -47,10 +75,14 @@ resource "azurerm_kubernetes_cluster" "default" {
     os_disk_size_gb = 30
   }
 
-  service_principal {
-    client_id     = var.appId
-    client_secret = var.password
+  identity {
+    type = "SystemAssigned"
   }
+
+#  service_principal {
+#    client_id     = var.appId
+#    client_secret = var.password
+#  }
 
   role_based_access_control {
     enabled = true
@@ -59,6 +91,20 @@ resource "azurerm_kubernetes_cluster" "default" {
   tags = {
     environment = "Demo"
   }
+
+  addon_profile {
+
+    kube_dashboard {
+      enabled = true
+    }
+
+    oms_agent {
+      enabled = true
+      log_analytics_workspace_id = "${azurerm_log_analytics_workspace.default.id}"
+    }
+    
+  }
+
 }
 
 
