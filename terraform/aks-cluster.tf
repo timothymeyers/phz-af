@@ -22,6 +22,15 @@ resource "azurerm_resource_group" "default" {
   }
 }
 
+resource "azurerm_container_registry" "default" {
+  name                     = "${random_pet.prefix.id}-acr"
+  location                 = azurerm_resource_group.default.location
+  resource_group_name      = azurerm_resource_group.default.name
+  sku                      = "Basic"
+  admin_enabled            = false
+}
+
+
 resource "azurerm_kubernetes_cluster" "default" {
   name                = "${random_pet.prefix.id}-aks"
   location            = azurerm_resource_group.default.location
