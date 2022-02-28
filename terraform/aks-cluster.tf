@@ -5,7 +5,7 @@ terraform {
     resource_group_name  = "phopstfstates"
     storage_account_name = "phopstf"
     container_name       = "tfstatedevops"
-    key                  = "tfstatedevops-3.tfstate"
+    key                  = "tfstatedevops.tfstate"
   }
 }
 
@@ -102,7 +102,7 @@ resource "azurerm_kubernetes_cluster" "default" {
       enabled = true
       log_analytics_workspace_id = "${azurerm_log_analytics_workspace.default.id}"
     }
-    
+
   }
 
 }
