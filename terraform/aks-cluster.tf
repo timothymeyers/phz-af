@@ -92,11 +92,6 @@ resource "azurerm_kubernetes_cluster" "default" {
   }
 
   addon_profile {
-
-    kube_dashboard {
-      enabled = true
-    }
-
     oms_agent {
       enabled = true
       log_analytics_workspace_id = "${azurerm_log_analytics_workspace.default.id}"
