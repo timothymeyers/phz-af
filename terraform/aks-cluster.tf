@@ -14,7 +14,7 @@ provider "azurerm" {
 }
 
 provider "azuread" {
-  version = "~>0.7"
+  features {}
 }
 
 ### Resource Group
