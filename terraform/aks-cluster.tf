@@ -115,6 +115,6 @@ resource "azurerm_role_assignment" "acrpull_role" {
   scope                            = azurerm_container_registry.default.id
   role_definition_name             = "AcrPull"
 #   principal_id                     = data.azuread_service_principal.aks_principal.id
-  principal_id                     = data.azurerm_kubernetes_cluster.default.id
+  principal_id                     = azurerm_kubernetes_cluster.default.id
   skip_service_principal_aad_check = true
 }
