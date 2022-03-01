@@ -62,10 +62,10 @@ resource "azurerm_container_registry" "default" {
 ### Azure Kubernetes Service
 
 resource "azurerm_kubernetes_cluster" "prod" {
-  name                = "${random_pet.prefix.id}-aks"
+  name                = "${random_pet.prefix.id}-prod-aks"
   location            = azurerm_resource_group.default.location
   resource_group_name = azurerm_resource_group.default.name
-  dns_prefix          = "${random_pet.prefix.id}-k8s"
+  dns_prefix          = "${random_pet.prefix.id}-prod-k8s"
 
   default_node_pool {
     name            = "system"
@@ -111,10 +111,10 @@ resource "azurerm_kubernetes_cluster_node_pool" "horizon" {
 ### Staging cluster
 
 resource "azurerm_kubernetes_cluster" "staging" {
-  name                = "${random_pet.prefix.id}-aks"
+  name                = "${random_pet.prefix.id}-staging-aks"
   location            = azurerm_resource_group.default.location
   resource_group_name = azurerm_resource_group.default.name
-  dns_prefix          = "${random_pet.prefix.id}-k8s"
+  dns_prefix          = "${random_pet.prefix.id}-staging-k8s"
 
   default_node_pool {
     name            = "system"
