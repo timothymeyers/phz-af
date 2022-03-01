@@ -167,7 +167,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "horizon-staging" {
 #   
 # }
 
-resource "azurerm_role_assignment" "acrpull_role" {
+resource "azurerm_role_assignment" "acrpull_role_prod" {
   scope                            = azurerm_container_registry.default.id
   role_definition_name             = "AcrPull"
 #   principal_id                     = data.azuread_service_principal.aks_principal.id
@@ -175,7 +175,7 @@ resource "azurerm_role_assignment" "acrpull_role" {
   skip_service_principal_aad_check = true
 }
 
-resource "azurerm_role_assignment" "acrpull_role" {
+resource "azurerm_role_assignment" "acrpull_role_staging" {
   scope                            = azurerm_container_registry.default.id
   role_definition_name             = "AcrPull"
 #   principal_id                     = data.azuread_service_principal.aks_principal.id
