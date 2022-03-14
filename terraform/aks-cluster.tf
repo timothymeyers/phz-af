@@ -4,8 +4,8 @@ terraform {
   backend "azurerm" {
     resource_group_name  = "phopstfstates"
     storage_account_name = "phopstf"
-    container_name       = "tfstatedevops-001"
-    key                  = "tfstatedevops.tfstate"
+    container_name       = "tfstatedevops"
+    key                  = "tfstatedevops-001.tfstate"
   }
 }
 
