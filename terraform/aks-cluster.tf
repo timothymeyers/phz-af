@@ -5,7 +5,7 @@ terraform {
     resource_group_name  = "phopstfstates"
     storage_account_name = "phopstf"
     container_name       = "tfstatedevops"
-    key                  = "tfstatedevops.tfstate"
+    key                  = "tfstatedevops-001.tfstate"
   }
 }
 
